@@ -1,12 +1,22 @@
 package com.optimagrowth.license.service;
 
 import com.optimagrowth.license.model.License;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.Locale;
 import java.util.Random;
 
 @Service
 public class LicenseService {
+
+    private final MessageSource messageSource;
+
+    public LicenseService(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
 
     public License getLicense(String licenseId, String organizationId) {
         License license = new License();
@@ -20,12 +30,12 @@ public class LicenseService {
         return license;
     }
 
-    public String createLicense(License license, String organizationId) {
+    public String createLicense(License license, String organizationId, Locale locale) {
         String responseMessage = null;
 
-        if (license != null) {
+        if (!StringUtils.isEmpty(license)) {
             license.setOrganizationId(organizationId);
-            responseMessage = String.format("This is the post and object is: %s", license.toString());
+            responseMessage = String.format(messageSource.getMessage("license.create.message", null, locale), license.toString());
         }
 
         return responseMessage;
@@ -34,9 +44,9 @@ public class LicenseService {
     public String updateLicense(License license, String organizationId) {
         String responseMessage = null;
 
-        if (license != null) {
+        if (!StringUtils.isEmpty(license)) {
             license.setOrganizationId(organizationId);
-            responseMessage = String.format("This is the put and object is: %s", license.toString());
+            responseMessage = String.format(messageSource.getMessage("license.update.message", null, null), license.toString());
         }
 
         return responseMessage;
